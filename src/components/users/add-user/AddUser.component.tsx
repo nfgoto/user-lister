@@ -1,10 +1,4 @@
-import {
-  ChangeEventHandler,
-  FC,
-  FormEventHandler,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEventHandler, FC, FormEventHandler, useState } from "react";
 import { InputError, User } from "../../../types";
 import Button from "../../UI/button/Button.component";
 import Card from "../../UI/card/Card.component";
@@ -16,8 +10,8 @@ interface AddUserProps {
 }
 
 const AddUser: FC<AddUserProps> = ({ onAddUser }) => {
-  const nameRef = useRef<HTMLInputElement | null>(null);
-  const ageRef = useRef<HTMLInputElement | null>(null);
+  // const nameRef = useRef<HTMLInputElement | null>(null);
+  // const ageRef = useRef<HTMLInputElement | null>(null);
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [error, setError] = useState<InputError | null>();
@@ -32,6 +26,12 @@ const AddUser: FC<AddUserProps> = ({ onAddUser }) => {
   }) => setAge(value);
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
+
+    // using refs instead of state slices to retrieve input values
+    // fine to use only refs for READING data
+    // this is UNCONTROLLED (by React) BEHAVIOR because we use the browser internal input APIs for I/O
+    // const name = nameRef.current?.value;
+    // const age = ageRef.current?.value;
 
     if (!name?.trim())
       return setError({
@@ -58,12 +58,20 @@ const AddUser: FC<AddUserProps> = ({ onAddUser }) => {
       age: +age,
     });
 
-    setName("");
-    setAge("");
+    // setName("");
+    // setAge("");
+
+    // manipulating the DOM directly without using React (AVOID = this is a hack!!)
+    // this is UNCONTROLLED (by React) BEHAVIOR because we use the browser internal input APIs for I/O
+    // nameRef.current!.value = "";
+    // ageRef.current!.value = "";
   };
   const closeModal = () => setError(null);
 
   return (
+    // <> is same as <React,Fragment>, to avoid div-soup (too many wrapping divs
+    // = slows perfs because unnecessary DOM element to render)
+    // similar to a wrapper component that only returns children: const Wrapper = ({children}) => children
     <>
       {error && (
         <ErrorModal
@@ -80,7 +88,7 @@ const AddUser: FC<AddUserProps> = ({ onAddUser }) => {
             id="user-name"
             value={name}
             onChange={handleNameChange}
-            ref={nameRef}
+            // ref={nameRef}
           />
 
           <label htmlFor="age">Age</label>
@@ -91,7 +99,7 @@ const AddUser: FC<AddUserProps> = ({ onAddUser }) => {
             value={age}
             min={minAge}
             max={maxAge}
-            ref={ageRef}
+            // ref={ageRef}
           />
 
           <Button type="submit">Add User</Button>

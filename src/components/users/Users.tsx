@@ -8,14 +8,11 @@ const Users: FC = () => {
   const handleAddUser = (u: User) => setUsers((prev) => [u, ...prev]);
 
   return (
-    // <> is same as <React,Fragment>, to avoid div-soup (too many wrapping divs
-    // = slows perfs because unnecessary DOM element to render)
-    // similar to a wrapper component that only returns children: const Wrapper = ({children}) => children
-    <>
+    <div>
       <AddUser onAddUser={handleAddUser} />
       <br />
       <UserList users={users} />
-    </>
+    </div>
   );
 };
 export default Users;
