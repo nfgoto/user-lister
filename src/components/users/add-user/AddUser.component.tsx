@@ -1,4 +1,10 @@
-import { ChangeEventHandler, FC, FormEventHandler, useState } from "react";
+import {
+  ChangeEventHandler,
+  FC,
+  FormEventHandler,
+  useRef,
+  useState,
+} from "react";
 import { InputError, User } from "../../../types";
 import Button from "../../UI/button/Button.component";
 import Card from "../../UI/card/Card.component";
@@ -10,6 +16,8 @@ interface AddUserProps {
 }
 
 const AddUser: FC<AddUserProps> = ({ onAddUser }) => {
+  const nameRef = useRef<HTMLInputElement | null>(null);
+  const ageRef = useRef<HTMLInputElement | null>(null);
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [error, setError] = useState<InputError | null>();
@@ -61,7 +69,7 @@ const AddUser: FC<AddUserProps> = ({ onAddUser }) => {
         <ErrorModal
           title={error.title}
           message={error.message}
-          onClick={closeModal}
+          onConfirm={closeModal}
         />
       )}
       <Card className={styles.input}>
@@ -72,6 +80,7 @@ const AddUser: FC<AddUserProps> = ({ onAddUser }) => {
             id="user-name"
             value={name}
             onChange={handleNameChange}
+            ref={nameRef}
           />
 
           <label htmlFor="age">Age</label>
@@ -82,6 +91,7 @@ const AddUser: FC<AddUserProps> = ({ onAddUser }) => {
             value={age}
             min={minAge}
             max={maxAge}
+            ref={ageRef}
           />
 
           <Button type="submit">Add User</Button>
