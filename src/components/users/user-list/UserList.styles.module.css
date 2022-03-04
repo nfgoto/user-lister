@@ -1,0 +1,9 @@
+.user-list {
+  background: wheat;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.empty {
+  text-align: center;
+}
